@@ -1,6 +1,8 @@
 'use strict';
 
-angular.module('QuickCompetitionApp', [])
+angular.module('LocalStorageModule').value('prefix', 'qc-');
+
+angular.module('QuickCompetitionApp', ['LocalStorageModule', 'ui.keypress'])
   .config(function ($routeProvider) {
     $routeProvider
       .when('/', {

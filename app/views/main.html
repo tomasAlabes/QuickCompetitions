@@ -1,29 +1,36 @@
 <div ng-controller="MainCtrl">
-    <div class="row">
+    <div class="inputs row">
         <div class="col-xs-12 col-sm-6">
             <div class="input-group">
                 <span class="input-group-btn">
-                    <button class="btn btn-default" type="button">+</button>
+                    <button class="btn btn-default" type="button" ng-click="addParticipant()">+</button>
                 </span>
-                <input type="text" class="form-control" autofocus placeholder="Participant Name"/>
+                <input type="text" class="form-control" autofocus placeholder="Participant Name" ng-model="pName" ui-keypress="{13:'pKeyPressed($event)'}"/>
             </div>
         </div>
         <div class="col-xs-12 col-sm-6">
             <div class="input-group">
-                <input type="text" class="form-control" placeholder="Category">
                 <span class="input-group-btn">
-                    <button class="btn btn-default" type="button">+</button>
+                    <button class="btn btn-default" type="button" ng-click="addCategory()">+</button>
+                </span>
+                <input type="text" class="form-control" placeholder="Category" ng-model="cName" ui-keypress="{13:'cKeyPressed($event)'}">
+                <span class="input-group-btn" style="width: 100px;">
+                    <select class="form-control" ng-model="cType" ng-options="c.name for c in categoryOptions"></select>
                 </span>
             </div>
         </div>
     </div>
 
-    <table class="table">
+    <table class="table table-striped">
         <tr>
-            <!-- Participants -->
+            <th>#</th>
+            <th>Participant</th>
+            <th ng-repeat="category in categories">{{ category.name }}</th>
         </tr>
-        <tr>
-            <!-- Categories -->
+        <tr ng-repeat="participant in participants">
+            <td>{{ $index }}</td>
+            <td>{{ participant.name }}</td>
+            <td ng-repeat="category in categories">{{ participant.category || '-' }}</td>
         </tr>
     </table>
 </div>
