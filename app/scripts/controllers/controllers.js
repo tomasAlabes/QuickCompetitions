@@ -7,63 +7,64 @@ app.controller('MainCtrl', [
         'localStorageService',
         function ($scope, localStorageService) {
             // Start fresh
-            var pIndex = 0,
-                pPrefix = "p"+pIndex,
-                cIndex = 0,
-                cPrefix = "c"+cIndex,
-                participantsArray,
-                categoriesArray;
+            var contest = $scope.contest = localStorageService.get('contest') || {
+                "participants": [],
+                "categories": []
+            };
 
-            $scope.categoryOptions = [{name:'5 Stars'}, {name:'1/10'}, {name:'1/100'}];
+            $scope.categories = contest.categories;
+            $scope.participants = contest.participants;
+            $scope.categoryOptions = [{type:'1/5', "maxValue": 5}, {type:'1/10', "maxValue": 10}, {type:'1/100', "maxValue": 100}];
             $scope.cType = $scope.categoryOptions[0];
 
-            $scope.addParticipant = function () {
-                if ($scope.pName !== "") {
-                    var newParticipant = {name: $scope.pName};
-                    $scope.participants.push(newParticipant);
-                    localStorageService.add(pPrefix, newParticipant);
-                    pPrefix = "p" + ++pIndex;
-                    $scope.pName = "";
-                }
+            function randomId(){
+                return Math.floor(Math.random() * 10000000000);
+            }
+
+            function Participant (name){
+                this.id = randomId();
+                this.name = name;
+                this.categories = [];
+            }
+
+            function Category (name, category){
+                this.id = randomId();
+                this.name = name;
+                this.type = category.type;
+                this.maxValue = category.maxValue;
+            }
+
+            $scope.save = function() {
+                localStorageService.set('contest', contest);
             };
 
-            $scope.participants = (function(){
-                if(!participantsArray){
-                    participantsArray = [];
-                    var i = 0,
-                        ix = "p"+i;
-                    while(localStorageService.get(ix)){
-                        participantsArray.push(localStorageService.get(ix));
-                        ix = "p"+ ++i;
-                    }
-                    pIndex = i;
+            $scope.addParticipant = function () {
+                var newParticipant = new Participant($scope.pName);
+                contest.participants.push(newParticipant);
+                $scope.pName = "";
+
+                for (var i = 0; i < contest.categories.length; i++) {
+                    newParticipant.categories.push(contest.categories[i]);
                 }
-                return participantsArray;
-            })();
+
+                save();
+            };
+
 
             $scope.addCategory = function () {
-                if ($scope.cName !== "") {
-                    var newCategory = {name: $scope.cName, type: $scope.cType};
-                    $scope.categories.push(newCategory);
-                    localStorageService.add(cPrefix, newCategory);
-                    cPrefix = "c" + ++cIndex;
-                    $scope.cName = "";
+                var newCategory = new Category($scope.cName, $scope.cType);
+                contest.categories.push(newCategory);
+
+                for (var i = 0; i < contest.participants.length; i++) {
+                    var newC = new Category($scope.cName, $scope.cType);
+                    newC.value = 0;
+                    contest.participants[i].categories.push(newC);
                 }
+
+                $scope.cName = "";
+                save();
             };
 
-            $scope.categories = (function(){
-                if(!categoriesArray){
-                    categoriesArray = [];
-                    var i = 0,
-                        ix = "c"+i;
-                    while(localStorageService.get(ix)){
-                        categoriesArray.push(localStorageService.get(ix));
-                        ix = "c" + ++i;
-                    }
-                    cIndex = i;
-                }
-                return categoriesArray;
-            })();
 
             $scope.pKeyPressed = function(evt){
                 $scope.addParticipant();
@@ -72,5 +73,11 @@ app.controller('MainCtrl', [
             $scope.cKeyPressed = function(evt){
                 $scope.addCategory();
             };
+
+            $scope.clearAll = function(){
+                localStorageService.clearAll();
+                $scope.contest.participants.length = 0;
+                $scope.contest.categories.length = 0;
+            }
 
         }]);
