@@ -1,0 +1,1 @@
+angular.module('QC.services', []);

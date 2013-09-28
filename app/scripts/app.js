@@ -2,7 +2,7 @@
 
 angular.module('LocalStorageModule').value('prefix', 'qc-');
 
-angular.module('QuickCompetitionApp', ['LocalStorageModule', 'ui.keypress'])
+angular.module('QC', ['LocalStorageModule', 'ui.keypress'])
   .config(function ($routeProvider) {
     $routeProvider
       .when('/', {

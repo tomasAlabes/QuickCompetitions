@@ -1,6 +1,8 @@
 'use strict';
 
-angular.module('QuickCompetitionApp').controller('MainCtrl', [
+var app = angular.module('QC');
+
+app.controller('MainCtrl', [
         '$scope',
         'localStorageService',
         function ($scope, localStorageService) {
