@@ -41,13 +41,13 @@ app.controller('MainCtrl', [
             $scope.addParticipant = function () {
                 var newParticipant = new Participant($scope.pName);
                 contest.participants.push(newParticipant);
-                $scope.pName = "";
 
                 for (var i = 0; i < contest.categories.length; i++) {
                     newParticipant.categories.push(contest.categories[i]);
                 }
 
-                save();
+                $scope.pName = "";
+                $scope.save();
             };
 
 
@@ -62,7 +62,7 @@ app.controller('MainCtrl', [
                 }
 
                 $scope.cName = "";
-                save();
+                $scope.save();
             };
 
 
@@ -79,5 +79,28 @@ app.controller('MainCtrl', [
                 $scope.contest.participants.length = 0;
                 $scope.contest.categories.length = 0;
             }
+
+            $scope.finish = function(){
+                var max = 0,
+                    winner;
+
+                for (var i = 0; i < contest.participants.length; i++) {
+                    var pValue = 0;
+                    for (var j = 0; j < contest.participants[i].categories.length; j++) {
+                        pValue += contest.participants[i].categories[j].value;
+                    }
+                    if(pValue > max){
+                        max = pValue;
+                        winner = contest.participants[i];
+                    }
+                    pValue = 0;
+                }
+
+                $scope.showWinner = true;
+                $scope.winnerMsg = "Congratulations " + winner.name + ", you won with " + max + " points!!!!";
+
+            }
+
+            $scope.showWinner = false;
 
         }]);

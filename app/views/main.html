@@ -35,5 +35,10 @@
             </td>
         </tr>
     </table>
-    <button class="clearAll" type="button" ng-click="clearAll()">Clear All</button>
+
+    <button class="btn btn-success" type="button" ng-click="finish()">Finish Competition</button>
+    <button class="pull-right btn btn-danger" type="button" ng-click="clearAll()">Clear All</button>
+
+    <div class="finishMsg alert alert-success" ng-show="showWinner">{{ winnerMsg }}</div>
+
 </div>
