@@ -32,6 +32,7 @@ app.controller('MainCtrl', [
                 this.name = name;
                 this.type = category.type;
                 this.maxValue = category.maxValue;
+                this.value = 1;
             }
 
             $scope.save = function() {
@@ -43,7 +44,7 @@ app.controller('MainCtrl', [
                 contest.participants.push(newParticipant);
 
                 for (var i = 0; i < contest.categories.length; i++) {
-                    newParticipant.categories.push(contest.categories[i]);
+                    newParticipant.categories.push(angular.copy(contest.categories[i]));
                 }
 
                 $scope.pName = "";
@@ -56,9 +57,7 @@ app.controller('MainCtrl', [
                 contest.categories.push(newCategory);
 
                 for (var i = 0; i < contest.participants.length; i++) {
-                    var newC = new Category($scope.cName, $scope.cType);
-                    newC.value = 0;
-                    contest.participants[i].categories.push(newC);
+                    contest.participants[i].categories.push(angular.copy(newCategory));
                 }
 
                 $scope.cName = "";
@@ -100,6 +99,11 @@ app.controller('MainCtrl', [
                 $scope.winnerMsg = "Congratulations " + winner.name + ", you won with " + max + " points!!!!";
 
             }
+
+            $scope.$watch('participants + categories', function(){
+                $scope.disableFinish = $scope.participants.length === 0;
+                $scope.disableClearAll = $scope.participants.length === 0 && $scope.categories.length === 0;
+            });
 
             $scope.showWinner = false;
 

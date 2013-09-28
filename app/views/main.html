@@ -31,13 +31,15 @@
             <td>{{ $index }}</td>
             <td>{{ participant.name }}</td>
             <td ng-repeat="category in participant.categories">
-                <input type="number" ng-change="save()" ng-model="category.value" min="0" max="{{category.maxValue}}"/>
+                <input type="number" ng-change="save()" ng-model="category.value" min="1" max="{{category.maxValue}}"/>
             </td>
         </tr>
     </table>
 
-    <button class="btn btn-success" type="button" ng-click="finish()">Finish Competition</button>
-    <button class="pull-right btn btn-danger" type="button" ng-click="clearAll()">Clear All</button>
+    <div class="controls">
+        <button class="btn btn-success" ng-disabled="disableFinish" type="button" ng-click="finish()">Finish Competition</button>
+        <button class="pull-right btn btn-danger" ng-disabled="disableClearAll" type="button" ng-click="clearAll()">Clear All</button>
+    </div>
 
     <div class="finishMsg alert alert-success" ng-show="showWinner">{{ winnerMsg }}</div>
 
