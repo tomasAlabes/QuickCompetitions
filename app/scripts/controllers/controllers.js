@@ -47,28 +47,33 @@ app.controller('MainCtrl', [
     };
 
     $scope.addParticipant = function () {
-      var newParticipant = new Participant($scope.pName);
-      contest.participants.push(newParticipant);
+      if ($scope.pName) {
+        var newParticipant = new Participant($scope.pName);
+        contest.participants.push(newParticipant);
 
-      for (var i = 0; i < contest.categories.length; i++) {
-        newParticipant.categories.push(angular.copy(contest.categories[i]));
+        for (var i = 0; i < contest.categories.length; i++) {
+          newParticipant.categories.push(angular.copy(contest.categories[i]));
+        }
+
+        $scope.pName = '';
+        $scope.save();
+
       }
-
-      $scope.pName = '';
-      $scope.save();
     };
 
 
     $scope.addCategory = function () {
-      var newCategory = new Category($scope.cName, $scope.cType);
-      contest.categories.push(newCategory);
+      if ($scope.cName) {
+        var newCategory = new Category($scope.cName, $scope.cType);
+        contest.categories.push(newCategory);
 
-      for (var i = 0; i < contest.participants.length; i++) {
-        contest.participants[i].categories.push(angular.copy(newCategory));
+        for (var i = 0; i < contest.participants.length; i++) {
+          contest.participants[i].categories.push(angular.copy(newCategory));
+        }
+
+        $scope.cName = '';
+        $scope.save();
       }
-
-      $scope.cName = '';
-      $scope.save();
     };
 
 

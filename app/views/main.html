@@ -5,7 +5,7 @@
                 <span class="input-group-btn">
                     <button class="btn btn-default" type="button" ng-click="addParticipant()">+</button>
                 </span>
-                <input type="text" ng-minlength="1" class="form-control" autofocus placeholder="Participant Name" ng-model="pName" ui-keypress="{13:'pKeyPressed($event)'}"/>
+                <input type="text" class="form-control" autofocus placeholder="Participant Name" ng-model="pName" ui-keypress="{13:'pKeyPressed($event)'}"/>
             </div>
         </div>
         <div class="col-xs-12 col-sm-6">
@@ -13,7 +13,7 @@
                 <span class="input-group-btn">
                     <button class="btn btn-default" type="button" ng-click="addCategory()">+</button>
                 </span>
-                <input type="text" ng-minlength="1" class="form-control" placeholder="Category" ng-model="cName" ui-keypress="{13:'cKeyPressed($event)'}">
+                <input type="text" class="form-control" placeholder="Category" ng-model="cName" ui-keypress="{13:'cKeyPressed($event)'}">
                 <span class="input-group-btn" style="width: 100px;">
                     <select class="form-control" ng-model="cType" ng-options="c.type for c in categoryOptions"></select>
                 </span>
