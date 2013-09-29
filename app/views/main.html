@@ -5,17 +5,17 @@
                 <span class="input-group-btn">
                     <button class="btn btn-default" type="button" ng-click="addParticipant()">+</button>
                 </span>
-                <input type="text" class="form-control" autofocus placeholder="Participant Name" ng-model="pName" ui-keypress="{13:'pKeyPressed($event)'}"/>
+                <input type="text" class="form-control" autofocus placeholder="Add Participant" ng-model="pName" ui-keypress="{13:'pKeyPressed($event)'}"/>
             </div>
         </div>
         <div class="col-xs-12 col-sm-6">
             <div class="input-group">
                 <span class="input-group-btn">
-                    <button class="btn btn-default" type="button" ng-click="addCategory()">+</button>
+                    <button class="btn btn-default" type="button" ng-click="addCriterion()">+</button>
                 </span>
-                <input type="text" class="form-control" placeholder="Category" ng-model="cName" ui-keypress="{13:'cKeyPressed($event)'}">
+                <input type="text" class="form-control" placeholder="Add Criterion" ng-model="cName" ui-keypress="{13:'cKeyPressed($event)'}">
                 <span class="input-group-btn" style="width: 100px;">
-                    <select class="form-control" ng-model="cType" ng-options="c.type for c in categoryOptions"></select>
+                    <select class="form-control" ng-model="cType" ng-options="c.type for c in criteriaOptions"></select>
                 </span>
             </div>
         </div>
@@ -25,13 +25,13 @@
         <tr>
             <th>#</th>
             <th>Participant</th>
-            <th ng-repeat="category in categories">{{ category.name }} ({{category.type }})</th>
+            <th ng-repeat="criterion in criteria">{{ criterion.name }} ({{criterion.type }})</th>
         </tr>
         <tr ng-repeat="participant in participants">
             <td>{{ $index }}</td>
             <td>{{ participant.name }}</td>
-            <td ng-repeat="category in participant.categories">
-                <input type="number" ng-change="save()" ng-model="category.value" min="1" max="{{category.maxValue}}"/>
+            <td ng-repeat="criterion in participant.criteria">
+                <input type="number" ng-change="save()" ng-model="criterion.value" min="1" max="{{criterion.maxValue}}"/>
             </td>
         </tr>
     </table>

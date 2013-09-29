@@ -19,6 +19,21 @@ describe('Controller: MainCtrl', function () {
 
   it('should start with an empty contest', function () {
     expect(scope.contest.participants.length).toBe(0);
-    expect(scope.contest.categories.length).toBe(0);
+    expect(scope.contest.criteria.length).toBe(0);
   });
+
+  it('should add a participant', function(){
+    scope.pName = 'Tomi';
+    scope.addParticipant();
+    expect(scope.contest.participants.length).toBe(1);
+    expect(scope.pName).toBe('');
+  });
+
+  it('should add a criteria', function(){
+    scope.cName = 'Fun';
+    scope.addCriterion();
+    expect(scope.contest.criteria.length).toBe(1);
+    expect(scope.cName).toBe('');
+  });
+
 });
