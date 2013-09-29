@@ -10,7 +10,8 @@
     "angular-resource": "~1.0.7",
     "angular-sanitize": "~1.0.7",
     "angular-localstorage": "latest",
-    "angular-ui-utils": "latest"
+    "angular-ui-utils": "latest",
+    "sass-bootstrap-compass": "latest"
   },
   "devDependencies": {
     "angular-mocks": "~1.0.7",
