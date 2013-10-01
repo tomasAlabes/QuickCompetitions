@@ -89,6 +89,7 @@ app.controller('MainCtrl', [
       localStorageService.clearAll();
       $scope.contest.participants.length = 0;
       $scope.contest.criteria.length = 0;
+      $scope.showWinner = false;
     };
 
     $scope.finish = function () {
@@ -118,6 +119,7 @@ app.controller('MainCtrl', [
     });
 
     $scope.showWinner = false;
-
+    $scope.disableFinish = true;
+    $scope.disableClearAll = true;
   }
 ]);
