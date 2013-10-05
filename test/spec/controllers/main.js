@@ -40,15 +40,15 @@ describe('Controller: MainCtrl', function () {
     expect(scope.contest.criteria.length).toBe(0);
     expect(scope.disableFinish).toBeTruthy();
     expect(scope.disableClearAll).toBeTruthy();
-    expect(scope.showWinner).toBeFalsy();
+    expect(scope.showAward).toBeFalsy();
   });
 
   it('should add a participant', function(){
     createParticipant('Tomi');
     expect(scope.contest.participants.length).toBe(1);
     expect(scope.pName).toBe('');
-    expect(scope.showWinner).toBeFalsy();
-    expect(scope.disableFinish).toBeFalsy();
+    expect(scope.showAward).toBeFalsy();
+    expect(scope.disableFinish).toBeTruthy();
     expect(scope.disableClearAll).toBeFalsy();
   });
 
@@ -56,7 +56,7 @@ describe('Controller: MainCtrl', function () {
     createCriterion('Fun');
     expect(scope.contest.criteria.length).toBe(1);
     expect(scope.cName).toBe('');
-    expect(scope.showWinner).toBeFalsy();
+    expect(scope.showAward).toBeFalsy();
     expect(scope.disableFinish).toBeTruthy();
     expect(scope.disableClearAll).toBeFalsy();
   });
@@ -80,7 +80,7 @@ describe('Controller: MainCtrl', function () {
     expect(contest).toBeNull();
     expect(scope.contest.participants.length).toBe(0);
     expect(scope.contest.criteria.length).toBe(0);
-    expect(scope.showWinner).toBeFalsy();
+    expect(scope.showAward).toBeFalsy();
   });
 
   it('should win the participant with more points', function(){
@@ -94,7 +94,7 @@ describe('Controller: MainCtrl', function () {
     scope.contest.participants[1].criteria[1].value = 15;
     scope.finish();
     expect(scope.winnerMsg).toBe('Congratulations Chu, you won with 25 points!!!!');
-    expect(scope.showWinner).toBeTruthy();
+    expect(scope.showAward).toBeTruthy();
   });
 
 });

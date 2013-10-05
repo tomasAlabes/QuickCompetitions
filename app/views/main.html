@@ -41,6 +41,12 @@
         <button class="pull-right btn btn-danger" ng-disabled="disableClearAll" type="button" ng-click="clearAll()">Clear All</button>
     </div>
 
-    <div class="finishMsg alert alert-success" ng-show="showWinner">{{ winnerMsg }}</div>
+    <div class="award" ng-show="showAward">
+        <img class="awardCup" src="../images/award/trophy_gold.png" alt="Trophy"/>
+        <h1 class="awardMsg">{{ winnerMsg }}</h1>
+        <button class="btn btn-success awardOk" type="button" ng-click="closeAward()">OK</button>
+    </div>
+
+    <div class="overlay" ng-show="showOverlay"></div>
 
 </div>

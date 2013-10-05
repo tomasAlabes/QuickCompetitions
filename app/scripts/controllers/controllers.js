@@ -89,7 +89,13 @@ app.controller('MainCtrl', [
       localStorageService.clearAll();
       $scope.contest.participants.length = 0;
       $scope.contest.criteria.length = 0;
-      $scope.showWinner = false;
+      $scope.showOverlay = false;
+      $scope.showAward = false;
+    };
+
+    $scope.closeAward = function() {
+      $scope.showOverlay = false;
+      $scope.showAward = false;
     };
 
     $scope.finish = function () {
@@ -108,17 +114,19 @@ app.controller('MainCtrl', [
         pValue = 0;
       }
 
-      $scope.showWinner = true;
+      $scope.showOverlay = true;
+      $scope.showAward = true;
       $scope.winnerMsg = 'Congratulations ' + winner.name + ', you won with ' + max + ' points!!!!';
 
     };
 
     $scope.$watch('participants + criteria', function () {
-      $scope.disableFinish = $scope.participants.length === 0;
+      $scope.disableFinish = $scope.participants.length === 0 || $scope.criteria.length === 0;
       $scope.disableClearAll = $scope.participants.length === 0 && $scope.criteria.length === 0;
     });
 
-    $scope.showWinner = false;
+    $scope.showAward = false;
+    $scope.showOverlay = false;
     $scope.disableFinish = true;
     $scope.disableClearAll = true;
   }
