@@ -27,7 +27,7 @@
             <th>Participant</th>
             <th ng-repeat="criterion in criteria">{{ criterion.name }} ({{criterion.type }})</th>
         </tr>
-        <tr ng-repeat="participant in participants">
+        <tr ng-repeat="participant in participants | filter:searchText">
             <td>{{ $index }}</td>
             <td>{{ participant.name }}</td>
             <td ng-repeat="criterion in participant.criteria">
@@ -36,11 +36,14 @@
         </tr>
     </table>
 
+    <input placeholder="Search participant" class="search" type="text" ng-model="searchText" />
+
     <div class="controls">
         <button class="btn btn-success" ng-disabled="disableFinish" type="button" ng-click="finish()">Finish Competition</button>
         <button class="pull-right btn btn-danger" ng-disabled="disableClearAll" type="button" ng-click="clearAll()">Clear All</button>
     </div>
 
+    <!-- Award screen -->
     <div class="award" ng-show="showAward">
         <img class="awardCup" src="../images/award/trophy_gold.png" alt="Trophy"/>
         <h1 class="awardMsg">{{ winnerMsg }}</h1>
@@ -51,4 +54,6 @@
     <audio id="fireworks">
         <source src="../sounds/fireworks.mp3" type='audio/mpeg; codecs="mp3"'>
     </audio>
+
+    <canvas id="canvas" ng-show="showAward">Canvas is not supported in your browser.</canvas>
 </div>
