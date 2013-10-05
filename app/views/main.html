@@ -31,7 +31,7 @@
             <td>{{ $index }}</td>
             <td>{{ participant.name }}</td>
             <td ng-repeat="criterion in participant.criteria">
-                <input type="number" ng-change="save()" ng-model="criterion.value" min="1" max="{{criterion.maxValue}}"/>
+                <input class="criterionInput" type="number" ng-change="save()" ng-model="criterion.value" min="1" max="{{criterion.maxValue}}"/>
             </td>
         </tr>
     </table>
