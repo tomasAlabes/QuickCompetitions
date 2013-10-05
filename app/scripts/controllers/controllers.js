@@ -138,7 +138,7 @@ app.controller('MainCtrl', [
     $scope.disableClearAll = true;
 
     // when animating on canvas, it is best to use requestAnimationFrame instead of setTimeout or setInterval
-    // not supported in all browsers though and sometimes needs a prefix, so we need a shim
+// not supported in all browsers though and sometimes needs a prefix, so we need a shim
     window.requestAnimFrame = (function () {
       return window.requestAnimationFrame ||
         window.webkitRequestAnimationFrame ||
@@ -148,7 +148,7 @@ app.controller('MainCtrl', [
         };
     })();
 
-    // now we will setup our basic variables for the demo
+  // now we will setup our basic variables for the demo
     var canvas = document.getElementById('canvas'),
       ctx = canvas.getContext('2d'),
       // full screen dimensions
@@ -160,13 +160,9 @@ app.controller('MainCtrl', [
       particles = [],
       // starting hue
       hue = 120,
-      // when launching fireworks with a click, too many get launched at once without a limiter, one launch per 5 loop ticks
-      limiterTotal = 5,
-      limiterTick = 0,
       // this will time the auto launches of fireworks, one launch per 80 loop ticks
-      timerTotal = 50,
+      timerTotal = 60,
       timerTick = 0,
-      mousedown = false,
       // mouse x coordinate,
       mx,
       // mouse y coordinate
@@ -212,7 +208,7 @@ app.controller('MainCtrl', [
         this.coordinates.push([ this.x, this.y ]);
       }
       this.angle = Math.atan2(ty - sy, tx - sx);
-      this.speed = 5;
+      this.speed = 20;
       this.acceleration = 1.05;
       this.brightness = random(50, 70);
     }
@@ -243,7 +239,7 @@ app.controller('MainCtrl', [
         this.x += vx;
         this.y += vy;
       }
-    }
+    };
 
 // draw firework
     Firework.prototype.draw = function () {
@@ -314,7 +310,7 @@ app.controller('MainCtrl', [
 // create particle group/explosion
     function createParticles(x, y) {
       // increase the particle count for a bigger explosion, beware of the canvas performance hit with the increased particles though
-      var particleCount = 30;
+      var particleCount = 40;
       while (particleCount--) {
         particles.push(new Particle(x, y));
       }
@@ -355,24 +351,15 @@ app.controller('MainCtrl', [
 
       // launch fireworks automatically to random coordinates, when the mouse isn't down
       if (timerTick >= timerTotal) {
-        if (!mousedown) {
-          // start the firework at the bottom middle of the screen, then set the random target coordinates, the random y coordinates will be set within the range of the top half of the screen
-          fireworks.push(new Firework(cw / 2, ch, random(0, cw), random(0, ch / 2)));
-          timerTick = 0;
-        }
-      } else {
+        // start the firework at the bottom middle of the screen, then set the random target coordinates, the random y coordinates will be set within the range of the top half of the screen
+        fireworks.push(new Firework(cw / 2, ch, random(0, cw), random(0, ch / 2)));
+        fireworks.push(new Firework(cw / 2, ch, random(0, cw), random(0, ch / 2)));
+        fireworks.push(new Firework(cw / 2, ch, random(0, cw), random(0, ch / 2)));
+        fireworks.push(new Firework(cw / 2, ch, random(0, cw), random(0, ch / 2)));
+        fireworks.push(new Firework(cw / 2, ch, random(0, cw), random(0, ch / 2)));
+        timerTick = 0;
+      }else{
         timerTick++;
-      }
-
-      // limit the rate at which fireworks get launched when mouse is down
-      if (limiterTick >= limiterTotal) {
-        if (mousedown) {
-          // start the firework at the bottom middle of the screen, then set the current mouse coordinates as the target
-          fireworks.push(new Firework(cw / 2, ch, mx, my));
-          limiterTick = 0;
-        }
-      } else {
-        limiterTick++;
       }
     }
 
