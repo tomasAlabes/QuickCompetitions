@@ -93,9 +93,13 @@ app.controller('MainCtrl', [
       $scope.showAward = false;
     };
 
+    var fireworks = document.getElementById('fireworks');
+
     $scope.closeAward = function() {
       $scope.showOverlay = false;
       $scope.showAward = false;
+      fireworks.pause();
+      fireworks.currentTime = 0;
     };
 
     $scope.finish = function () {
@@ -113,6 +117,8 @@ app.controller('MainCtrl', [
         }
         pValue = 0;
       }
+
+      fireworks.play();
 
       $scope.showOverlay = true;
       $scope.showAward = true;
