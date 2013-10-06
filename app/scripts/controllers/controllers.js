@@ -102,27 +102,46 @@ app.controller('MainCtrl', [
       fireworksSound.currentTime = 0;
     };
 
-    $scope.finish = function () {
+    function calculateWinner() {
       var max = 0,
-        winner;
+        winners = [];
 
-      for (var i = 0; i < contest.participants.length; i++) {
-        var pValue = 0;
-        for (var j = 0; j < contest.participants[i].criteria.length; j++) {
-          pValue += contest.participants[i].criteria[j].value;
+      var participantsLength = contest.participants.length;
+      for (var i = 0; i < participantsLength; i++) {
+        var pValue = 0,
+          currentParticipant = contest.participants[i],
+          participantCriteriaLength = currentParticipant.criteria.length;
+
+        for (var j = 0; j < participantCriteriaLength; j++) {
+          pValue += currentParticipant.criteria[j].value / currentParticipant.criteria[j].maxValue;
         }
+
+        pValue = pValue / participantCriteriaLength;
+
         if (pValue > max) {
           max = pValue;
-          winner = contest.participants[i];
+          winners.length = 0;
+          winners.push(currentParticipant.name);
+        }else if(pValue === max){
+          winners.push(currentParticipant.name);
         }
+
         pValue = 0;
       }
+
+      return {max: max, winners: winners};
+    }
+
+    $scope.finish = function () {
+      var win = calculateWinner(),
+        max = win.max,
+        winners = win.winners.join();
 
       fireworksSound.play();
 
       $scope.showOverlay = true;
       $scope.showAward = true;
-      $scope.winnerMsg = 'Congratulations ' + winner.name + ', you won with ' + max + ' points!!!!';
+      $scope.winnerMsg = 'Congratulations ' + winners + ', you won with ' + Math.round(max*100) + '% efficiency!!!!';
     };
 
     $scope.$watch('participants + criteria', function () {
