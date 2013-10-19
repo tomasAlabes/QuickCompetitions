@@ -8,28 +8,29 @@ app.controller('MainCtrl', [
   function ($scope, Competition) {
 
     function Participant(name) {
-      this.id = randomId();
       this.name = name;
       this.criteria = [];
     }
 
     function Criterion(name, category) {
-      this.id = randomId();
       this.name = name;
       this.type = category.type;
       this.maxValue = category.maxValue;
       this.value = 1;
     }
 
-    function randomId() {
-      return Math.floor(Math.random() * 10000000000);
+    function initApp(){
+      $scope.criteria = competition.criteria;
+      $scope.participants = competition.participants;
+      $scope.$watch('participants + criteria', function () {
+        $scope.disableFinish = $scope.participants.length === 0 || $scope.criteria.length === 0;
+        $scope.disableClearAll = $scope.participants.length === 0 && $scope.criteria.length === 0;
+      });
     }
 
     // Start fresh
-    var competition = $scope.competition = Competition.get({id: 1}) || new Competition({ participants: [], criteria: [] });
+    var competition = $scope.competition = Competition.get({id: 1}, initApp) || (new Competition({ participants: [], criteria: [] }) && initApp());
 
-    $scope.criteria = competition.criteria;
-    $scope.participants = competition.participants;
     $scope.criteriaOptions = [
       {type: '1/5', 'maxValue': 5},
       {type: '1/10', 'maxValue': 10},
@@ -138,11 +139,6 @@ app.controller('MainCtrl', [
       $scope.showAward = true;
       $scope.winnerMsg = 'Congratulations ' + winners + ', you won with ' + Math.round(max*100) + '% efficiency!!!!';
     };
-
-    $scope.$watch('participants + criteria', function () {
-      $scope.disableFinish = $scope.participants.length === 0 || $scope.criteria.length === 0;
-      $scope.disableClearAll = $scope.participants.length === 0 && $scope.criteria.length === 0;
-    });
 
     $scope.showAward = false;
     $scope.showOverlay = false;
