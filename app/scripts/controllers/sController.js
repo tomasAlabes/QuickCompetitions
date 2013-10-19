@@ -4,13 +4,8 @@ var app = angular.module('QC');
 
 app.controller('MainCtrl', [
   '$scope',
-  'localStorageService',
-  function ($scope, localStorageService) {
-
-    function Contest() {
-      this.participants = [];
-      this.criteria = [];
-    }
+  'Competition',
+  function ($scope, Competition) {
 
     function Participant(name) {
       this.id = randomId();
@@ -31,10 +26,10 @@ app.controller('MainCtrl', [
     }
 
     // Start fresh
-    var contest = $scope.contest = localStorageService.get('contest') || new Contest();
+    var competition = $scope.competition = Competition.get({id: 1}) || new Competition({ participants: [], criteria: [] });
 
-    $scope.criteria = contest.criteria;
-    $scope.participants = contest.participants;
+    $scope.criteria = competition.criteria;
+    $scope.participants = competition.participants;
     $scope.criteriaOptions = [
       {type: '1/5', 'maxValue': 5},
       {type: '1/10', 'maxValue': 10},
@@ -43,16 +38,16 @@ app.controller('MainCtrl', [
     $scope.cType = $scope.criteriaOptions[0];
 
     $scope.save = function () {
-      localStorageService.set('contest', contest);
+      Competition.save(competition);
     };
 
     $scope.addParticipant = function () {
       if ($scope.pName) {
         var newParticipant = new Participant($scope.pName);
-        contest.participants.push(newParticipant);
+        competition.participants.push(newParticipant);
 
-        for (var i = 0; i < contest.criteria.length; i++) {
-          newParticipant.criteria.push(angular.copy(contest.criteria[i]));
+        for (var i = 0; i < competition.criteria.length; i++) {
+          newParticipant.criteria.push(angular.copy(competition.criteria[i]));
         }
 
         $scope.pName = '';
@@ -65,10 +60,10 @@ app.controller('MainCtrl', [
     $scope.addCriterion = function () {
       if ($scope.cName) {
         var newCategory = new Criterion($scope.cName, $scope.cType);
-        contest.criteria.push(newCategory);
+        competition.criteria.push(newCategory);
 
-        for (var i = 0; i < contest.participants.length; i++) {
-          contest.participants[i].criteria.push(angular.copy(newCategory));
+        for (var i = 0; i < competition.participants.length; i++) {
+          competition.participants[i].criteria.push(angular.copy(newCategory));
         }
 
         $scope.cName = '';
@@ -86,9 +81,9 @@ app.controller('MainCtrl', [
     };
 
     $scope.clearAll = function () {
-      localStorageService.clearAll();
-      $scope.contest.participants.length = 0;
-      $scope.contest.criteria.length = 0;
+      Competition.remove(competition);
+      $scope.competition.participants.length = 0;
+      $scope.competition.criteria.length = 0;
       $scope.showOverlay = false;
       $scope.showAward = false;
     };
@@ -106,10 +101,10 @@ app.controller('MainCtrl', [
       var max = 0,
         winners = [];
 
-      var participantsLength = contest.participants.length;
+      var participantsLength = competition.participants.length;
       for (var i = 0; i < participantsLength; i++) {
         var pValue = 0,
-          currentParticipant = contest.participants[i],
+          currentParticipant = competition.participants[i],
           participantCriteriaLength = currentParticipant.criteria.length;
 
         for (var j = 0; j < participantCriteriaLength; j++) {
