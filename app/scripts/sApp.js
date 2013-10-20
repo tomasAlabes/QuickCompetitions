@@ -2,7 +2,7 @@
 
 angular.module('LocalStorageModule').value('prefix', 'qc-');
 
-angular.module('QC', ['LocalStorageModule', 'ui.keypress', 'QC.directives', 'QC.services'])
+angular.module('QC', ['LocalStorageModule', /*'ngCookies' ,*/'ui.keypress', 'QC.directives', 'QC.services'])
   .config(function ($routeProvider) {
     $routeProvider
       .when('/', {
@@ -12,4 +12,6 @@ angular.module('QC', ['LocalStorageModule', 'ui.keypress', 'QC.directives', 'QC.
       .otherwise({
         redirectTo: '/'
       });
-  });
+  })/*.run(function($cookieStore){
+    $cookieStore.put('XSRF-TOKEN', 'MyToken');
+  })*/;

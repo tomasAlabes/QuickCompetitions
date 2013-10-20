@@ -8,6 +8,12 @@ RoRServer::Application.routes.draw do
   # Example of regular route:
   get 'api/competitions/:id' => 'competitions#view'
 
+  post 'api/competitions/' => 'competitions#new'
+
+  put 'api/competitions/:id' => 'competitions#put'
+
+  delete 'api/competitions/:id' => 'competitions#delete'
+
   # Example of named route that can be invoked with purchase_url(id: product.id)
   #   get 'products/:id/purchase' => 'catalog#purchase', as: :purchase
 

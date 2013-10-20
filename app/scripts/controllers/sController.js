@@ -38,10 +38,6 @@ app.controller('MainCtrl', [
     ];
     $scope.cType = $scope.criteriaOptions[0];
 
-    $scope.save = function () {
-      Competition.save(competition);
-    };
-
     $scope.addParticipant = function () {
       if ($scope.pName) {
         var newParticipant = new Participant($scope.pName);
@@ -52,8 +48,7 @@ app.controller('MainCtrl', [
         }
 
         $scope.pName = '';
-        $scope.save();
-
+        competition.$save();
       }
     };
 
@@ -68,7 +63,7 @@ app.controller('MainCtrl', [
         }
 
         $scope.cName = '';
-        $scope.save();
+        competition.$save();
       }
     };
 
@@ -82,7 +77,7 @@ app.controller('MainCtrl', [
     };
 
     $scope.clearAll = function () {
-      Competition.remove(competition);
+      competition.$delete();
       $scope.competition.participants.length = 0;
       $scope.competition.criteria.length = 0;
       $scope.showOverlay = false;
