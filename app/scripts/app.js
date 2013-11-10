@@ -1,6 +1,8 @@
 'use strict';
 
-angular.module('QC', ['ui.keypress', 'QC.directives', 'QC.services'])
+angular.module('LocalStorageModule').value('prefix', 'qc-');
+
+angular.module('QC', ['LocalStorageModule', 'ui.keypress', 'QC.directives'])
   .config(function ($routeProvider) {
     $routeProvider
       .when('/', {

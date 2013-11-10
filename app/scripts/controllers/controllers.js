@@ -4,33 +4,37 @@ var app = angular.module('QC');
 
 app.controller('MainCtrl', [
   '$scope',
-  'Competition',
-  function ($scope, Competition) {
+  'localStorageService',
+  function ($scope, localStorageService) {
+
+    function Contest() {
+      this.participants = [];
+      this.criteria = [];
+    }
 
     function Participant(name) {
+      this.id = randomId();
       this.name = name;
       this.criteria = [];
     }
 
     function Criterion(name, category) {
+      this.id = randomId();
       this.name = name;
       this.type = category.type;
       this.maxValue = category.maxValue;
       this.value = 1;
     }
 
-    function initApp(){
-      $scope.criteria = competition.criteria;
-      $scope.participants = competition.participants;
-      $scope.$watch('participants + criteria', function () {
-        $scope.disableFinish = $scope.participants.length === 0 || $scope.criteria.length === 0;
-        $scope.disableClearAll = $scope.participants.length === 0 && $scope.criteria.length === 0;
-      });
+    function randomId() {
+      return Math.floor(Math.random() * 10000000000);
     }
 
     // Start fresh
-    var competition = $scope.competition = Competition.get({id: 1}, initApp) || (new Competition({ participants: [], criteria: [] }) && initApp());
+    var contest = $scope.contest = localStorageService.get('contest') || new Contest();
 
+    $scope.criteria = contest.criteria;
+    $scope.participants = contest.participants;
     $scope.criteriaOptions = [
       {type: '1/5', 'maxValue': 5},
       {type: '1/10', 'maxValue': 10},
@@ -38,17 +42,22 @@ app.controller('MainCtrl', [
     ];
     $scope.cType = $scope.criteriaOptions[0];
 
+    $scope.save = function () {
+      localStorageService.set('contest', contest);
+    };
+
     $scope.addParticipant = function () {
       if ($scope.pName) {
         var newParticipant = new Participant($scope.pName);
-        competition.participants.push(newParticipant);
+        contest.participants.push(newParticipant);
 
-        for (var i = 0; i < competition.criteria.length; i++) {
-          newParticipant.criteria.push(angular.copy(competition.criteria[i]));
+        for (var i = 0; i < contest.criteria.length; i++) {
+          newParticipant.criteria.push(angular.copy(contest.criteria[i]));
         }
 
         $scope.pName = '';
-        competition.$save();
+        $scope.save();
+
       }
     };
 
@@ -56,14 +65,14 @@ app.controller('MainCtrl', [
     $scope.addCriterion = function () {
       if ($scope.cName) {
         var newCategory = new Criterion($scope.cName, $scope.cType);
-        competition.criteria.push(newCategory);
+        contest.criteria.push(newCategory);
 
-        for (var i = 0; i < competition.participants.length; i++) {
-          competition.participants[i].criteria.push(angular.copy(newCategory));
+        for (var i = 0; i < contest.participants.length; i++) {
+          contest.participants[i].criteria.push(angular.copy(newCategory));
         }
 
         $scope.cName = '';
-        competition.$save();
+        $scope.save();
       }
     };
 
@@ -77,9 +86,9 @@ app.controller('MainCtrl', [
     };
 
     $scope.clearAll = function () {
-      competition.$delete();
-      $scope.competition.participants.length = 0;
-      $scope.competition.criteria.length = 0;
+      localStorageService.clearAll();
+      $scope.contest.participants.length = 0;
+      $scope.contest.criteria.length = 0;
       $scope.showOverlay = false;
       $scope.showAward = false;
     };
@@ -97,10 +106,10 @@ app.controller('MainCtrl', [
       var max = 0,
         winners = [];
 
-      var participantsLength = competition.participants.length;
+      var participantsLength = contest.participants.length;
       for (var i = 0; i < participantsLength; i++) {
         var pValue = 0,
-          currentParticipant = competition.participants[i],
+          currentParticipant = contest.participants[i],
           participantCriteriaLength = currentParticipant.criteria.length;
 
         for (var j = 0; j < participantCriteriaLength; j++) {
@@ -134,6 +143,11 @@ app.controller('MainCtrl', [
       $scope.showAward = true;
       $scope.winnerMsg = 'Congratulations ' + winners + ', you won with ' + Math.round(max*100) + '% efficiency!!!!';
     };
+
+    $scope.$watch('participants + criteria', function () {
+      $scope.disableFinish = $scope.participants.length === 0 || $scope.criteria.length === 0;
+      $scope.disableClearAll = $scope.participants.length === 0 && $scope.criteria.length === 0;
+    });
 
     $scope.showAward = false;
     $scope.showOverlay = false;
